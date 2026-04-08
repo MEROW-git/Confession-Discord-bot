@@ -1,0 +1,37 @@
+# ============================================
+# Anonymous Confession Bot - Dependencies
+# ============================================
+
+# Discord.py - Core Discord bot library
+discord.py>=2.3.0
+
+# Supabase Python Client - Database connection
+supabase>=2.0.0
+
+# HTTP client for Supabase
+httpx>=0.24.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# PostgreSQL adapter (optional, for direct connections if needed)
+psycopg2-binary>=2.9.0
+
+# Async PostgreSQL (alternative, more modern)
+asyncpg>=0.28.0
+
+# Logging utilities
+structlog>=23.0.0
+
+# Date/time utilities
+python-dateutil>=2.8.0
+
+# ============================================
+# Development Dependencies (optional)
+# ============================================
+# Uncomment for development:
+# pytest>=7.4.0
+# pytest-asyncio>=0.21.0
+# black>=23.0.0
+# flake8>=6.0.0
+# mypy>=1.5.0
