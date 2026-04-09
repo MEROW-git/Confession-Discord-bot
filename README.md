@@ -54,7 +54,7 @@ Also include these scopes:
 
 - Create a Supabase project
 - Open [database/schema.sql](/e:/bot/confession-bot/database/schema.sql)
-- Run that SQL in the Supabase SQL Editor
+- Run the full SQL from that file in the Supabase SQL Editor before starting the bot
 - Go to `Settings -> API`
 - Copy:
   - `Project URL`
@@ -73,6 +73,11 @@ DISCORD_TOKEN=your_discord_bot_token
 SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your_server_secret_key
 ```
+
+Important:
+
+- You must run [database/schema.sql](/e:/bot/confession-bot/database/schema.sql) in Supabase SQL Editor first
+- If you skip that step, commands like `/setup` and `/confess` will fail because the required tables do not exist
 
 ### 5. Run the bot
 
@@ -118,12 +123,31 @@ SUPABASE_URL=postgresql://...
 
 The bot is running, but it has not been invited to any server yet.
 
-## Main Commands
+## Commands
 
-- `/confess` submit a confession
-- `/setup` configure the bot in a server
-- `/settings` view server settings
-- `/pending` view pending confessions
+- `/setup` : configure the confession channel, review channel, and admin role
+- `/confess` : submit an anonymous confession for admin review
+- `/help` : show help information about the bot
+- `/pending` : view pending confessions waiting for review
+- `/stats` : view confession statistics for the server
+- `/settings` : view the current bot settings
+- `/toggle_badword_filter` : enable or disable the bad word filter
+- `/set_filter_action` : choose whether filtered confessions are flagged, rejected, or censored
+- `/add_badword` : add a word to the bad word filter
+- `/remove_badword` : remove a word from the bad word filter
+- `/list_badwords` : list all blocked words
+- `/set_cooldown` : set how long users must wait between confessions
+- `/ban_confess_user` : ban a user from sending confessions
+- `/unban_confess_user` : unban a server member from sending confessions
+- `/unban_confess_user_by_id` : unban a user by Discord ID
+- `/list_banned_users` : list all users banned from confessions
+- `/check_ban_status` : check whether a user is banned from confessions
+
+Approval actions are handled from buttons in the review channel:
+
+- `Approve` : post the confession publicly
+- `Reject` : reject the confession
+- `Flag` : mark the confession for later review
 
 ## Notes
 

@@ -132,7 +132,7 @@ def public_confession_embed(
             inline=True
         )
         
-    embed.set_footer(text="Posted anonymously • React with 💬 to discuss")
+    embed.set_footer(text="Posted anonymously")
     return embed
 
 

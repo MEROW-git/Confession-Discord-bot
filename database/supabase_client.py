@@ -425,7 +425,7 @@ class SupabaseClient:
                 'last_submission_at': datetime.now(timezone.utc).isoformat()
             }
             self.client.table('user_cooldowns')\
-                .upsert(data)\
+                .upsert(data, on_conflict='guild_id,user_id')\
                 .execute()
             return True
         except APIError as e:

@@ -5,6 +5,7 @@ Handles bad word detection and content moderation.
 
 import re
 import logging
+import unicodedata
 from typing import List, Tuple, Set
 
 from database.supabase_client import db, DatabaseError
@@ -163,6 +164,25 @@ class SpamDetector:
         r'https?://\S{100,}',  # Very long URLs
         r'([\w\s])\1{50,}',  # Repeated words/phrases
     ]
+
+    CUSTOM_EMOJI_PATTERN = re.compile(r'<a?:\w+:\d+>')
+
+    @staticmethod
+    def count_emojis(content: str) -> int:
+        """Count custom Discord emoji and common Unicode emoji/symbol glyphs."""
+        custom_emoji_count = len(SpamDetector.CUSTOM_EMOJI_PATTERN.findall(content))
+        content_without_custom = SpamDetector.CUSTOM_EMOJI_PATTERN.sub('', content)
+
+        unicode_emoji_count = 0
+        for char in content_without_custom:
+            if char.isspace() or char.isalnum() or char == '_':
+                continue
+
+            category = unicodedata.category(char)
+            if category in {'So', 'Sk'}:
+                unicode_emoji_count += 1
+
+        return custom_emoji_count + unicode_emoji_count
     
     @staticmethod
     def is_spam(content: str) -> Tuple[bool, str]:
@@ -185,8 +205,7 @@ class SpamDetector:
             return True, "Excessive line breaks"
             
         # Check for excessive emoji
-        emoji_pattern = r'<a?:\w+:\d+>|[^\w\s\p{L}\p{N}]'
-        emoji_count = len(re.findall(emoji_pattern, content))
+        emoji_count = SpamDetector.count_emojis(content)
         if emoji_count > 50:
             return True, "Excessive emoji usage"
             

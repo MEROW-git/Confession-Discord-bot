@@ -53,6 +53,8 @@ class SetupCog(commands.Cog):
         await interaction.response.defer(ephemeral=True)
         
         try:
+            hierarchy_warning = None
+
             # Validate confession channel
             valid, error = await validate_channel_permissions(
                 interaction.guild.me,
@@ -96,17 +98,15 @@ class SetupCog(commands.Cog):
                 )
                 return
                 
-            # Check if bot's role is higher than admin role (needed for permissions)
+            # Role hierarchy can prevent automatic channel overwrite changes for the selected role.
+            # Treat that as a warning so the rest of setup can still complete.
             bot_top_role = interaction.guild.me.top_role
             if admin_role >= bot_top_role:
-                await interaction.followup.send(
-                    embed=error_embed(
-                        f"The admin role ({admin_role.mention}) must be below my highest role ({bot_top_role.mention}) "
-                        f"for me to manage permissions properly."
-                    ),
-                    ephemeral=True
+                hierarchy_warning = (
+                    f"The selected admin role ({admin_role.mention}) is not below my highest role "
+                    f"({bot_top_role.mention}). I may not be able to grant that role access to "
+                    f"{review_channel.mention} automatically, so please verify the channel permissions after setup."
                 )
-                return
                 
             # Set up review channel permissions
             setup_success, setup_error = await setup_review_channel_permissions(
@@ -161,6 +161,13 @@ class SetupCog(commands.Cog):
                 embed.add_field(
                     name=f"{Emojis.WARNING} Note",
                     value="I couldn't automatically set review channel permissions. Please verify them manually.",
+                    inline=False
+                )
+
+            if hierarchy_warning:
+                embed.add_field(
+                    name=f"{Emojis.WARNING} Role Hierarchy",
+                    value=hierarchy_warning,
                     inline=False
                 )
                 

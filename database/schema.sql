@@ -160,19 +160,24 @@ ALTER TABLE user_cooldowns ENABLE ROW LEVEL SECURITY;
 -- These are basic policies for reference:
 
 -- Allow all operations for service role (bot backend)
-CREATE POLICY IF NOT EXISTS service_role_all_guild_settings ON guild_settings
+DROP POLICY IF EXISTS service_role_all_guild_settings ON guild_settings;
+CREATE POLICY service_role_all_guild_settings ON guild_settings
     FOR ALL USING (true) WITH CHECK (true);
-    
-CREATE POLICY IF NOT EXISTS service_role_all_confessions ON confessions
+
+DROP POLICY IF EXISTS service_role_all_confessions ON confessions;
+CREATE POLICY service_role_all_confessions ON confessions
     FOR ALL USING (true) WITH CHECK (true);
-    
-CREATE POLICY IF NOT EXISTS service_role_all_blocked_words ON blocked_words
+
+DROP POLICY IF EXISTS service_role_all_blocked_words ON blocked_words;
+CREATE POLICY service_role_all_blocked_words ON blocked_words
     FOR ALL USING (true) WITH CHECK (true);
-    
-CREATE POLICY IF NOT EXISTS service_role_all_banned_users ON banned_users
+
+DROP POLICY IF EXISTS service_role_all_banned_users ON banned_users;
+CREATE POLICY service_role_all_banned_users ON banned_users
     FOR ALL USING (true) WITH CHECK (true);
-    
-CREATE POLICY IF NOT EXISTS service_role_all_user_cooldowns ON user_cooldowns
+
+DROP POLICY IF EXISTS service_role_all_user_cooldowns ON user_cooldowns;
+CREATE POLICY service_role_all_user_cooldowns ON user_cooldowns
     FOR ALL USING (true) WITH CHECK (true);
 
 -- ============================================
